@@ -125,46 +125,58 @@ export const generateEnvironmentalClue = (
 
   if (nearbyOperations.length > 0) {
     const randomOperation = nearbyOperations[Math.floor(Math.random() * nearbyOperations.length)];
+    const [opRow, opCol] = randomOperation.coordinates[0]; // Use first coordinate for general direction
+
+    let direction = '';
+    if (opRow < row && opCol < col) direction = 'northwest';
+    else if (opRow < row && opCol > col) direction = 'northeast';
+    else if (opRow > row && opCol < col) direction = 'southwest';
+    else if (opRow > row && opCol > col) direction = 'southeast';
+    else if (opRow < row) direction = 'north';
+    else if (opRow > row) direction = 'south';
+    else if (opCol < col) direction = 'west';
+    else if (opCol > col) direction = 'east';
+
     let message = '';
     switch (randomOperation.type) {
       case 'Drug Lab':
-        message = 'Informant reports chemical odors in this area.';
+        message = `Informant reports chemical odors in the ${direction} part of the city.`;
         break;
       case 'Weapons Cache':
-        message = 'Unusual late-night traffic reported nearby.';
+        message = `Unusual late-night traffic reported in a ${direction} neighborhood.`;
         break;
       case 'Money Laundering Front':
-        message = 'Suspicious financial activity detected in this sector.';
+        message = `Suspicious financial activity detected in the ${direction} sector.`;
         break;
       case 'Server Farm':
-        message = 'High energy consumption detected in a nearby building.';
+        message = `High energy consumption detected in a building to the ${direction}.`;
         break;
       case 'Data Center':
-        message = 'Unusual data traffic patterns originating from this vicinity.';
+        message = `Unusual data traffic patterns originating from the ${direction} vicinity.`;
         break;
       case 'Front Company':
-        message = 'Shell corporations with unusual transactions are operating nearby.';
+        message = `Shell corporations with unusual transactions are operating in the ${direction} area.`;
         break;
       case 'Forgery Studio':
-        message = 'Reports of unusual art supplies deliveries in the vicinity.';
+        message = `Reports of unusual art supplies deliveries in the ${direction} vicinity.`;
         break;
       case 'Auction House':
-        message = 'High-value art pieces are being moved discreetly in this area.';
+        message = `High-value art pieces are being moved discreetly in the ${direction} area.`;
         break;
       case 'Storage Facility':
-        message = 'Large, unmarked shipments have been observed in a nearby facility.';
+        message = `Large, unmarked shipments have been observed in a facility to the ${direction}.`;
         break;
       case 'Shipping Container':
-        message = 'Unusual activity around shipping containers in the port district.';
+        message = `Unusual activity around shipping containers in the ${direction} port district.`;
         break;
       case 'Warehouse Lab':
-        message = 'Strange fumes and unusual activity reported from a nearby warehouse.';
+        message = `Strange fumes and unusual activity reported from a warehouse in the ${direction}.`;
         break;
       case 'Safe House':
-        message = 'Known associates have been spotted frequenting a nearby residence.';
+        message = `Known associates have been spotted frequenting a residence in the ${direction} neighborhood.`;
         break;
       default:
-        message = 'Unusual activity detected in a nearby district.';
+        message = `Unusual activity detected in a ${direction} district.`;
     }
     return {
       id: generateId(),
@@ -190,14 +202,25 @@ export const generatePeriodicClue = (
   const randomOperation = availableOperations[Math.floor(Math.random() * availableOperations.length)];
   const randomCoordinate = randomOperation.coordinates[Math.floor(Math.random() * randomOperation.coordinates.length)];
 
-  const rowChar = String.fromCharCode(65 + randomCoordinate[1]);
-  const colNum = randomCoordinate[0] + 1;
+  // Determine general direction for periodic clues (can be more abstract)
+  let generalDirection = '';
+  const rowMid = gridSize / 2;
+  const colMid = gridSize / 2;
+
+  if (randomCoordinate[0] < rowMid && randomCoordinate[1] < colMid) generalDirection = 'northwest quadrant';
+  else if (randomCoordinate[0] < rowMid && randomCoordinate[1] >= colMid) generalDirection = 'northeast quadrant';
+  else if (randomCoordinate[0] >= rowMid && randomCoordinate[1] < colMid) generalDirection = 'southwest quadrant';
+  else if (randomCoordinate[0] >= rowMid && randomCoordinate[1] >= colMid) generalDirection = 'southeast quadrant';
+  else if (randomCoordinate[0] < rowMid) generalDirection = 'northern sector';
+  else if (randomCoordinate[0] >= rowMid) generalDirection = 'southern sector';
+  else if (randomCoordinate[1] < colMid) generalDirection = 'western sector';
+  else if (randomCoordinate[1] >= colMid) generalDirection = 'eastern sector';
 
   const clues = [
-    `Informant tip: Activity detected near ${randomOperation.type} in sector ${rowChar}${colNum}.`,
-    `Surveillance report: Unusual patterns observed in the vicinity of a ${randomOperation.type}.`,
-    `Communication intercept: A ${randomOperation.type} is active in the area of ${rowChar}${colNum}.`,
-    `Banking intelligence: Suspicious transactions linked to a ${randomOperation.type} in sector ${rowChar}${colNum}.`,
+    `Informant tip: Increased activity reported in the ${generalDirection}.`,
+    `Surveillance report: Unusual patterns observed in the ${generalDirection}.`,
+    `Communication intercept: A significant operation is active in the ${generalDirection}.`,
+    `Banking intelligence: Suspicious transactions linked to the ${generalDirection}.`,
   ];
 
   const randomClueMessage = clues[Math.floor(Math.random() * clues.length)];

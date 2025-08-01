@@ -76,6 +76,19 @@ export default function Home() {
   const handleBeginInvestigation = () => {
     setGameStarted(true); // This will start the timer effects
     setShowBriefingModal(false); // Hide the briefing modal
+
+    // Add initial intel based on the current case
+    if (currentCase) {
+      setGameState(prevState => ({
+        ...prevState,
+        clues: [...prevState.clues, {
+          id: `initial-clue-${Date.now()}`,
+          type: 'periodic_update',
+          message: `[Initial Intel] Detective, your mission is to uncover the hidden operations of "${currentCase.title}". Begin your investigation by sweeping the city grid.`,
+          timestamp: Math.floor(Date.now() / 1000),
+        }],
+      }));
+    }
   };
 
   // Resume game logic
@@ -204,10 +217,7 @@ export default function Home() {
       } else {
         // It's a miss
         newGrid[row][col] = { ...cell, status: 'empty' };
-        const environmentalClue = generateEnvironmentalClue(row, col, newGrid, newOperations, GRID_SIZE);
-        if (environmentalClue) {
-          newClues = [...prevGameState.clues, environmentalClue];
-        }
+        // Environmental clues are no longer generated on click, only periodic
       }
 
       // Check for victory condition
