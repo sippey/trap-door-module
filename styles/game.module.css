@@ -1,0 +1,139 @@
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* Header, Main Content, Footer */
+  height: 100vh;
+  width: 100vw;
+  font-family: Arial, sans-serif;
+  background-color: #222;
+  color: #eee;
+  overflow: hidden; /* Prevent overall scroll */
+}
+
+.statusBar {
+  padding: 10px 20px;
+  background-color: #333;
+  border-bottom: 1px solid #555;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  grid-row: 1; /* Place in the first row of the grid */
+}
+
+.mainContent {
+  display: flex; /* Use flexbox for main content area */
+  flex-direction: row; /* Arrange grid and clues panel side-by-side */
+  flex-grow: 1;
+  padding: 0px;
+  gap: 20px;
+  overflow: hidden;
+  grid-row: 2;
+}
+
+.gameGridContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Allow grid to take up available space */
+  flex-basis: 70%; /* 70% width for the grid container */
+  overflow: hidden;
+}
+
+.cluesPanel {
+  padding: 10px 20px;
+  background-color: #333;
+  border-left: 1px solid #555;
+  width: 30%; /* 30% width for the side panel */
+  height: 100%; /* Take full height of its flex container */
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.operationChecklist {
+  background-color: #333;
+  padding: 10px 20px;
+  border-top: 1px solid #555;
+  width: 100%; /* Full width of the container */
+  margin: 0; /* Remove auto margin */
+  grid-row: 3;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.operationChecklist h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.operationChecklist ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.operationChecklistItem {
+  padding: 8px 15px;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9em;
+}
+
+.operationChecklistItemBusted {
+  background-color: #28a745;
+}
+
+.operationChecklistItemPending {
+  background-color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    grid-template-rows: auto 1fr auto auto; /* Header, Grid, Clues, Checklist */
+  }
+
+  .statusBar {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .statusBar h2,
+  .statusBar div {
+    margin-bottom: 5px;
+  }
+
+  .mainContent {
+    flex-direction: column; /* Stack vertically on mobile */
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .gameGridContainer {
+    width: 100%; /* Allow grid to take full width */
+  }
+
+  .cluesPanel {
+    height: 100px; /* Smaller height on mobile */
+    width: 100%; /* Take full width on mobile */
+    border-left: none; /* Remove left border on mobile */
+    border-top: 1px solid #555; /* Add top border on mobile */
+  }
+
+  .operationChecklist {
+    width: 95%; /* Adjust width for mobile */
+    margin-top: 10px;
+    /* grid-row: 4; Removed as mainContent is now flex column */
+  }
+
+  .operationChecklistItem {
+    font-size: 0.8em; /* Smaller font for mobile */
+    padding: 6px 10px;
+  }
+}

@@ -1,0 +1,111 @@
+.menuContainer {
+  text-align: center;
+  padding: 50px;
+  background-color: #222;
+  color: #eee;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.button {
+  padding: 15px 30px;
+  font-size: 1.2em;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buttonPrimary {
+  background-color: #28a745;
+}
+
+.buttonPrimary:hover {
+  background-color: #218838;
+}
+
+.buttonWarning {
+  background-color: #ffc107;
+  color: black;
+}
+
+.buttonWarning:hover {
+  background-color: #e0a800;
+}
+
+.buttonInfo {
+  background-color: #17a2b8;
+}
+
+.buttonInfo:hover {
+  background-color: #138496;
+}
+
+.buttonSecondary {
+  background-color: #6c757d;
+}
+
+.buttonSecondary:hover {
+  background-color: #5a6268;
+}
+
+.buttonDisabled {
+  background-color: #555;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.leaderboardTable {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.tableHeader {
+  border: 1px solid #555;
+  padding: 10px;
+  text-align: left;
+}
+
+.tableCell {
+  border: 1px solid #555;
+  padding: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .menuContainer {
+    padding: 20px;
+  }
+
+  .buttonGroup {
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .button {
+    padding: 12px 25px;
+    font-size: 1em;
+  }
+
+  .leaderboardTable {
+    width: 95%; /* Adjust table width for smaller screens */
+    font-size: 0.9em; /* Smaller font for table content */
+  }
+
+  .tableHeader,
+  .tableCell {
+    padding: 8px; /* Smaller padding for table cells */
+  }
+}
