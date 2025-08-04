@@ -5,7 +5,10 @@ export class AudioManager {
   private isInitialized: boolean = false;
 
   constructor() {
-    this.initializeAudio();
+    // Only initialize on client side
+    if (typeof window !== 'undefined') {
+      this.initializeAudio();
+    }
   }
 
   private initializeAudio() {
