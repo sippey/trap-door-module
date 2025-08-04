@@ -1,13 +1,14 @@
 .menuContainer {
   text-align: center;
   padding: 50px;
-  background-color: #222;
-  color: #eee;
+  background-color: #562a0e; /* seal-brown */
+  color: #e4ceaf; /* dun */
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-family: 'Metamorphous', serif;
 }
 
 .buttonGroup {
@@ -20,6 +21,7 @@
 .button {
   padding: 15px 30px;
   font-size: 1.2em;
+  font-family: 'Metamorphous', serif;
   color: white;
   border: none;
   border-radius: 5px;
@@ -28,11 +30,11 @@
 }
 
 .buttonPrimary {
-  background-color: #28a745;
+  background-color: #c8691c; /* alloy-orange */
 }
 
 .buttonPrimary:hover {
-  background-color: #218838;
+  background-color: #d09259; /* persian-orange */
 }
 
 .buttonWarning {
@@ -45,11 +47,11 @@
 }
 
 .buttonInfo {
-  background-color: #17a2b8;
+  background-color: #78380c; /* russet */
 }
 
 .buttonInfo:hover {
-  background-color: #138496;
+  background-color: #562a0e; /* seal-brown */
 }
 
 .buttonSecondary {

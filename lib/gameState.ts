@@ -1,4 +1,4 @@
-export type GridCellStatus = 'unchecked' | 'empty' | 'partial_hit' | 'found';
+export type GridCellStatus = 'unchecked' | 'knocking' | 'empty' | 'partial_hit' | 'found';
 
 export interface GridCell {
   status: GridCellStatus;

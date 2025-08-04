@@ -8,6 +8,7 @@ import EndGameScreen from '../components/EndGameScreen';
 import { initialGameState, GameState, TrapDoor } from '../lib/gameState';
 import { initializeGridWithTrapDoor, generateTrapDoorHitClue, generateTrapDoorFoundClue, generateMissClue } from '../lib/gameUtils';
 import { ROOM } from '../lib/cases';
+import { audioManager } from '../lib/audioUtils';
 
 const GRID_SIZE = 10;
 
@@ -80,68 +81,104 @@ export default function Home() {
         return prevGameState;
       }
 
-      const newGrid = prevGameState.grid.map(rowArr => [...rowArr]);
-      const newTrapDoor = { ...prevGameState.trapDoor };
-      let newClues = [...prevGameState.clues];
-      const cell = newGrid[row][col];
-
+      const cell = prevGameState.grid[row][col];
       if (cell.status !== 'unchecked') {
         return prevGameState;
       }
 
-      const newTapsUsed = prevGameState.tapsUsed + 1;
-      let newIsGameOver = false;
-      let newIsVictory = false;
+      // Play random knock sound effect
+      audioManager.playRandomKnock();
 
-      if (cell.isTrapDoor) {
-        // It's a hit!
-        newGrid[row][col] = { ...cell, status: 'partial_hit' };
-
-        // Check if all parts of the trap door are now discovered
-        const discoveredCells = newTrapDoor.coordinates.filter(([r, c]) =>
-          newGrid[r][c].status === 'partial_hit' || newGrid[r][c].status === 'found'
-        ).length;
-
-        if (discoveredCells === newTrapDoor.coordinates.length) {
-          // Trap door is fully found!
-          newTrapDoor.found = true;
-          newTrapDoor.coordinates.forEach(([r, c]) => {
-            newGrid[r][c].status = 'found';
-          });
-          newIsVictory = true;
-          newIsGameOver = true;
-          // Generate victory clue
-          newClues.push(generateTrapDoorFoundClue());
-        } else {
-          // Generate partial hit clue
-          newClues.push(generateTrapDoorHitClue());
-        }
-      } else {
-        // It's a miss - generate miss clue
-        newGrid[row][col] = { ...cell, status: 'empty' };
-        newClues.push(generateMissClue(newTapsUsed));
-      }
-
-      // Check for failure condition
-      if (newTapsUsed >= 30 && !newIsVictory) {
-        newIsGameOver = true;
-      }
-
-      const calculatedScore = (newIsVictory || newIsGameOver) ? (prevGameState.timer + (newTapsUsed * 10)) : null;
+      // First, set the cell to 'knocking' state
+      const newGrid = prevGameState.grid.map(rowArr => [...rowArr]);
+      newGrid[row][col] = { ...cell, status: 'knocking' };
 
       return {
         ...prevGameState,
         grid: newGrid,
-        trapDoor: newTrapDoor,
-        tapsUsed: newTapsUsed,
-        isGameOver: newIsGameOver,
-        isVictory: newIsVictory,
-        score: calculatedScore !== null ? calculatedScore : prevGameState.score,
-        clues: newClues,
       };
     });
 
-    // Removed leaderboard functionality for simplified experience
+    // After 2 seconds, reveal the actual result
+    setTimeout(() => {
+      setGameState(prevGameState => {
+        if (prevGameState.isGameOver || !prevGameState.trapDoor) {
+          return prevGameState;
+        }
+
+        const newGrid = prevGameState.grid.map(rowArr => [...rowArr]);
+        const newTrapDoor = { ...prevGameState.trapDoor };
+        let newClues = [...prevGameState.clues];
+        const cell = newGrid[row][col];
+
+        // Skip if cell is no longer in knocking state (shouldn't happen)
+        if (cell.status !== 'knocking') {
+          return prevGameState;
+        }
+
+        const newTapsUsed = prevGameState.tapsUsed + 1;
+        let newIsGameOver = false;
+        let newIsVictory = false;
+
+        if (cell.isTrapDoor) {
+          // It's a hit!
+          newGrid[row][col] = { ...cell, status: 'partial_hit' };
+
+          // Check if all parts of the trap door are now discovered
+          const discoveredCells = newTrapDoor.coordinates.filter(([r, c]) =>
+            newGrid[r][c].status === 'partial_hit' || newGrid[r][c].status === 'found'
+          ).length;
+
+          if (discoveredCells === newTrapDoor.coordinates.length) {
+            // Trap door is fully found!
+            newTrapDoor.found = true;
+            newTrapDoor.coordinates.forEach(([r, c]) => {
+              newGrid[r][c].status = 'found';
+            });
+            newIsVictory = true;
+            // Generate victory clue
+            newClues.push(generateTrapDoorFoundClue());
+            
+            // Play door opening sound effect
+            audioManager.playDoorOpen();
+            
+            // Don't set game over immediately - let player see the success state
+            // We'll set game over after a delay
+            setTimeout(() => {
+              setGameState(prevState => ({
+                ...prevState,
+                isGameOver: true
+              }));
+            }, 3000); // 3 second pause to admire the found trap door
+          } else {
+            // Generate partial hit clue
+            newClues.push(generateTrapDoorHitClue());
+          }
+        } else {
+          // It's a miss - generate miss clue
+          newGrid[row][col] = { ...cell, status: 'empty' };
+          newClues.push(generateMissClue(newTapsUsed));
+        }
+
+        // Check for failure condition
+        if (newTapsUsed >= 30 && !newIsVictory) {
+          newIsGameOver = true;
+        }
+
+        const calculatedScore = (newIsVictory || newIsGameOver) ? (prevGameState.timer + (newTapsUsed * 10)) : null;
+
+        return {
+          ...prevGameState,
+          grid: newGrid,
+          trapDoor: newTrapDoor,
+          tapsUsed: newTapsUsed,
+          isGameOver: newIsGameOver,
+          isVictory: newIsVictory,
+          score: calculatedScore !== null ? calculatedScore : prevGameState.score,
+          clues: newClues,
+        };
+      });
+    }, 2000); // 2 second delay
   };
 
   return (
@@ -159,7 +196,6 @@ export default function Home() {
           tapsUsed={gameState.tapsUsed}
           timer={gameState.timer}
           clues={gameState.clues}
-          onQuitGame={handleBackToIntro}
           gameTitle={ROOM.title}
           trapDoor={gameState.trapDoor}
         >

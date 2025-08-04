@@ -1,0 +1,55 @@
+@keyframes knockingPulse {
+  0% { 
+    background-color: #d09259; /* persian-orange */
+    transform: scale(1);
+  }
+  25% { 
+    background-color: #e4ceaf; /* lighter dun */
+    transform: scale(1.02);
+  }
+  50% { 
+    background-color: #d09259; /* persian-orange */
+    transform: scale(1);
+  }
+  75% { 
+    background-color: #e4ceaf; /* lighter dun */
+    transform: scale(1.02);
+  }
+  100% { 
+    background-color: #d09259; /* persian-orange */
+    transform: scale(1);
+  }
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e4ceaf;
+}
+
+.gridCell {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e4ceaf;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.gridCellKnocking {
+  animation: knockingPulse 0.8s ease-in-out infinite;
+}
+
+.trapDoorLabel {
+  font-size: 0.8em;
+  text-align: center;
+  color: #e4ceaf;
+  text-shadow: 1px 1px 2px #562a0e;
+  font-weight: bold;
+}

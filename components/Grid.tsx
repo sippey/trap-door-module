@@ -1,5 +1,6 @@
 import React from 'react';
 import { GridState, GridCell, TrapDoor } from '../lib/gameState';
+import styles from '../styles/grid.module.css';
 
 interface GridProps {
   grid: GridState;
@@ -9,44 +10,31 @@ interface GridProps {
 
 const Grid: React.FC<GridProps> = ({ grid, trapDoor, onCellClick }) => {
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(10, 1fr)',
-      gridTemplateRows: 'repeat(10, 1fr)',
-      width: '100%',
-      height: '100%',
-      border: '1px dotted orange',
-    }}>
+    <div className={styles.gridContainer}>
       {grid.map((row, rowIndex) => (
         row.map((cell: GridCell, colIndex: number) => {
           const isFound = cell.status === 'found';
+          const isKnocking = cell.status === 'knocking';
 
-          let backgroundColor = 'rgba(128, 128, 128, 0.05)'; // Very low transparency for unchecked
+          let backgroundColor = 'rgba(228, 206, 175, 0.05)'; // dun - very subtle for unchecked
           if (cell.status === 'empty') {
-            backgroundColor = 'rgba(0, 0, 0, 0.5)'; // More transparent black for empty cells
+            backgroundColor = '#562a0e'; // solid seal-brown for empty cells - high contrast
           } else if (cell.status === 'partial_hit') {
-            backgroundColor = 'rgba(255, 0, 0, 0.4)';
+            backgroundColor = '#c8691c'; // solid alloy-orange for partial hits - high contrast
           } else if (isFound) {
-            backgroundColor = 'rgba(0, 255, 0, 0.4)';
+            backgroundColor = '#78380c'; // solid russet for found trap door - high contrast
           }
 
           return (
             <div
               key={`${rowIndex}-${colIndex}`}
+              className={`${styles.gridCell} ${isKnocking ? styles.gridCellKnocking : ''}`}
               style={{
-                width: '100%',
-                height: '100%',
-                border: '1px dotted orange',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
-                backgroundColor: backgroundColor,
+                backgroundColor: isKnocking ? undefined : backgroundColor, // Let CSS animation handle knocking color
               }}
               onClick={() => onCellClick(rowIndex, colIndex)}
             >
-              {isFound && <span style={{ fontSize: '0.8em', textAlign: 'center', color: 'white', textShadow: '1px 1px 2px black' }}>TRAP DOOR</span>}
+              {isFound && <span className={styles.trapDoorLabel}>TRAP DOOR</span>}
             </div>
           );
         })

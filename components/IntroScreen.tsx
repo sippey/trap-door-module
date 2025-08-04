@@ -9,7 +9,7 @@ interface IntroScreenProps {
 const IntroScreen: React.FC<IntroScreenProps> = ({ onBeginGame }) => {
   return (
     <div className={styles.menuContainer}>
-      <h1>{ROOM.title}</h1>
+      <h1 style={{ fontSize: '3.5em', marginBottom: '0.5em' }}>{ROOM.title}</h1>
       <div style={{ maxWidth: '800px', margin: '20px auto', textAlign: 'left', lineHeight: '1.6' }}>
         <p>{ROOM.narrative.split('\n\n')[0]}</p>
         <p>{ROOM.narrative.split('\n\n')[1]}</p>
@@ -21,7 +21,7 @@ const IntroScreen: React.FC<IntroScreenProps> = ({ onBeginGame }) => {
         className={`${styles.button} ${styles.buttonPrimary}`}
         style={{ marginTop: '30px' }}
       >
-        Enter the Murder Castle
+        Escape the Room
       </button>
     </div>
   );

@@ -8,7 +8,6 @@ interface GameLayoutProps {
   tapsUsed: number;
   timer: number;
   clues: Clue[];
-  onQuitGame: () => void;
   gameTitle: string;
   trapDoor: TrapDoor | null;
 }
@@ -20,7 +19,17 @@ const formatTime = (seconds: number): string => {
   return `${pad(minutes)}:${pad(remainingSeconds)}`;
 };
 
-const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clues, onQuitGame, gameTitle, trapDoor }) => {
+const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clues, gameTitle, trapDoor }) => {
+  const tapsRemaining = 30 - tapsUsed;
+  const sanityPercentage = (tapsRemaining / 30) * 100;
+
+  // Color changes as sanity depletes - using Murder Castle palette
+  const getSanityColor = (percentage: number) => {
+    if (percentage > 66) return '#e4ceaf'; // dun (calm/rational)
+    if (percentage > 33) return '#d09259'; // persian-orange (worried/declining)
+    return '#c8691c'; // alloy-orange (panicked/insane)
+  };
+
   return (
     <div className={styles.fullViewportContainer}>
       {/* Navigation Bar at Top */}
@@ -28,11 +37,19 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clue
         <h2>{gameTitle}</h2>
         <div className={styles.gameStats}>
           <span>Timer: {formatTime(timer)}</span>
-          <span>Taps: {tapsUsed}/30</span>
+          <div className={styles.energyContainer}>
+            <span className={styles.energyLabel}>Sanity: {tapsRemaining}</span>
+            <div className={styles.energyBar}>
+              <div 
+                className={styles.energyFill}
+                style={{ 
+                  width: `${sanityPercentage}%`,
+                  backgroundColor: getSanityColor(sanityPercentage)
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <button onClick={onQuitGame} className={`${styles.button} ${styles.buttonSecondary}`}>
-          Quit Game
-        </button>
       </div>
 
       {/* Game Board in Middle */}

@@ -1,12 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-// Replace with the actual repository name
-const repoName = 'GameJamAITemplate';
-
 const nextConfig = {
-  basePath: `/${repoName}`,
-  assetPrefix: `/${repoName}/`,
-  output: 'export',
   images: {
     unoptimized: true, // Required for static export
   },

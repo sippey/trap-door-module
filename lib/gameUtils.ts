@@ -62,14 +62,19 @@ export const initializeGridWithTrapDoor = (
   return { grid, trapDoor };
 };
 
-// Generates a Holmes-themed clue when the player hits part of the trap door
+// Generates a clue when the player hits part of the trap door
 export const generateTrapDoorHitClue = (): Clue => {
   const clues = [
-    `The floorboard gives slightly under your touch - Holmes' craftsmanship at work.`,
-    `A hollow echo resonates beneath this panel. Your pulse quickens with hope.`,
-    `This board feels different... older, more worn. Part of Holmes' deadly design.`,
-    `The wood here is smooth from countless hands that came before you.`,
-    `Something shifts beneath this panel. The trap door mechanism stirs to life.`,
+    `The floorboard gives slightly under your desperate touch.`,
+    `A hollow echo resonates beneath this weathered panel.`,
+    `This board feels different, older and more worn.`,
+    `The wood here is smooth from countless desperate hands.`,
+    `Something shifts beneath this panel with mechanical precision.`,
+    `Your fingers detect the faintest gap around this board.`,
+    `The floorboard creaks with hidden promise underneath you.`,
+    `This panel wobbles slightly when you press it down.`,
+    `A different texture catches your fingernails on this board.`,
+    `The wood grain here runs opposite to all others.`,
   ];
 
   return {
@@ -80,13 +85,13 @@ export const generateTrapDoorHitClue = (): Clue => {
   };
 };
 
-// Generates a Holmes-themed clue when the player finds the complete trap door
+// Generates a clue when the player finds the complete trap door
 export const generateTrapDoorFoundClue = (): Clue => {
   const clues = [
-    `The trap door springs open with a mechanical groan - Holmes' escape route revealed!`,
-    `The panels slide away to reveal the darkness below. Freedom lies in the depths.`,
-    `Holmes' masterpiece unfolds before you - a perfect trap door, your path to salvation.`,
-    `The mechanism clicks into place as the hidden passage opens. You've outwitted the devil himself.`,
+    `The trap door springs open with a triumphant mechanical groan.`,
+    `The panels slide away to reveal blessed darkness below.`,
+    `The hidden passage unfolds before you like salvation itself.`,
+    `The mechanism clicks into place as freedom finally opens.`,
   ];
 
   return {
@@ -97,43 +102,35 @@ export const generateTrapDoorFoundClue = (): Clue => {
   };
 };
 
-// Generates a Holmes-themed clue when the player taps an empty space
+// Generates a clue when the player taps an empty space
 export const generateMissClue = (tapCount: number): Clue => {
-  const earlyGameClues = [
-    `The solid wood mocks your desperation. Holmes built his floors to deceive.`,
-    `Nothing but cold, unforgiving boards. The castle keeps its secrets well.`,
-    `Another dead end. You can almost hear Holmes' laughter echoing through the walls.`,
+  const clues = [
+    `The solid wood mocks your desperate, trembling fingers.`,
+    `Nothing but cold, unforgiving boards beneath your palms.`,
+    `Another dead end in this labyrinth of deception.`,
     `The floorboard holds firm, taunting you with false hope.`,
-    `Your knuckles ache against the solid wood. Holmes designed every plank to torment.`,
+    `Your knuckles ache against the unyielding wooden surface.`,
+    `The solid thud echoes your growing sense of despair.`,
+    `Time slips away as another panel proves utterly worthless.`,
+    `The walls seem to close in with each failure.`,
+    `Your strength wanes with every unsuccessful desperate attempt.`,
+    `Each failed tap brings you closer to doom.`,
+    `Panic sets in as precious seconds tick away.`,
+    `Your hands shake with exhaustion and mounting terror.`,
+    `The castle has claimed so many before you.`,
+    `Footsteps echo somewhere in the distance above you.`,
+    `Desperation claws at your throat with each failure.`,
+    `The wood grain blurs as tears cloud your vision.`,
+    `Your fingertips are raw from clawing at boards.`,
+    `The silence mocks your frantic search for escape.`,
+    `Every second counts and this one was wasted.`,
+    `The chamber seems to shrink with each failure.`,
   ];
-
-  const midGameClues = [
-    `Time slips away like the victims who came before you. Still nothing.`,
-    `The walls seem to close in as another panel proves worthless.`,
-    `Your strength wanes, just as Holmes intended. The clock is ticking.`,
-    `The solid thud echoes your growing despair. Holmes' trap tightens.`,
-    `Each failed attempt brings you closer to Holmes' return.`,
-  ];
-
-  const lateGameClues = [
-    `Panic sets in. Holmes could return at any moment and find you here.`,
-    `Your hands shake with exhaustion and terror. Is there even a way out?`,
-    `The Murder Castle has claimed so many. Will you join them in the basement?`,
-    `Holmes' footsteps echo somewhere in the distance. Time is almost up.`,
-    `Desperation claws at your throat as another panel fails to yield freedom.`,
-  ];
-
-  let clueArray = earlyGameClues;
-  if (tapCount > 20) {
-    clueArray = lateGameClues;
-  } else if (tapCount > 10) {
-    clueArray = midGameClues;
-  }
 
   return {
     id: generateId(),
     type: 'environmental',
-    message: clueArray[Math.floor(Math.random() * clueArray.length)],
+    message: clues[Math.floor(Math.random() * clues.length)],
     timestamp: Math.floor(Date.now() / 1000),
   };
 };
