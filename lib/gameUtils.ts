@@ -62,19 +62,19 @@ export const initializeGridWithTrapDoor = (
   return { grid, trapDoor };
 };
 
-// Generates a clue when the player hits part of the trap door
+// Generates a clue when the player hits part of the escape hatch
 export const generateTrapDoorHitClue = (): Clue => {
   const clues = [
-    `The floorboard gives slightly under your desperate touch.`,
-    `A hollow echo resonates beneath this weathered panel.`,
-    `This board feels different, older and more worn.`,
-    `The wood here is smooth from countless desperate hands.`,
-    `Something shifts beneath this panel with mechanical precision.`,
-    `Your fingers detect the faintest gap around this board.`,
-    `The floorboard creaks with hidden promise underneath you.`,
-    `This panel wobbles slightly when you press it down.`,
-    `A different texture catches your fingernails on this board.`,
-    `The wood grain here runs opposite to all others.`,
+    `Panel responds with a soft blue glow and mechanical click.`,
+    `Pressure sensor activated - LED strip illuminates the edges.`,
+    `This panel feels different - slightly warmer than others.`,
+    `Haptic feedback confirms connection to hydraulic system underneath.`,
+    `Status indicator shows green - part of access sequence detected.`,
+    `Your touch triggers a faint vibration in this panel.`,
+    `Embedded sensors detect authorized pressure pattern here.`,
+    `This panel yields slightly with a quiet servo whir.`,
+    `Neural interface briefly flickers to life under your fingers.`,
+    `Biometric scanner confirms this panel is access-enabled.`,
   ];
 
   return {
@@ -85,13 +85,13 @@ export const generateTrapDoorHitClue = (): Clue => {
   };
 };
 
-// Generates a clue when the player finds the complete trap door
+// Generates a clue when the player finds the complete escape hatch
 export const generateTrapDoorFoundClue = (): Clue => {
   const clues = [
-    `The trap door springs open with a triumphant mechanical groan.`,
-    `The panels slide away to reveal blessed darkness below.`,
-    `The hidden passage unfolds before you like salvation itself.`,
-    `The mechanism clicks into place as freedom finally opens.`,
+    `Access sequence complete - hatch unseals with hydraulic hiss.`,
+    `Emergency maintenance tunnel illuminates with safety lighting below.`,
+    `Biometric authorization confirmed - escape route now accessible.`,
+    `Hydraulic systems engage as the escape hatch opens smoothly.`,
   ];
 
   return {
@@ -102,29 +102,29 @@ export const generateTrapDoorFoundClue = (): Clue => {
   };
 };
 
-// Generates a clue when the player taps an empty space
+// Generates a clue when the player taps an inactive panel
 export const generateMissClue = (tapCount: number): Clue => {
   const clues = [
-    `The solid wood mocks your desperate, trembling fingers.`,
-    `Nothing but cold, unforgiving boards beneath your palms.`,
-    `Another dead end in this labyrinth of deception.`,
-    `The floorboard holds firm, taunting you with false hope.`,
-    `Your knuckles ache against the unyielding wooden surface.`,
-    `The solid thud echoes your growing sense of despair.`,
-    `Time slips away as another panel proves utterly worthless.`,
-    `The walls seem to close in with each failure.`,
-    `Your strength wanes with every unsuccessful desperate attempt.`,
-    `Each failed tap brings you closer to doom.`,
-    `Panic sets in as precious seconds tick away.`,
-    `Your hands shake with exhaustion and mounting terror.`,
-    `The castle has claimed so many before you.`,
-    `Footsteps echo somewhere in the distance above you.`,
-    `Desperation claws at your throat with each failure.`,
-    `The wood grain blurs as tears cloud your vision.`,
-    `Your fingertips are raw from clawing at boards.`,
-    `The silence mocks your frantic search for escape.`,
-    `Every second counts and this one was wasted.`,
-    `The chamber seems to shrink with each failure.`,
+    `Panel shows red error light - not part of access sequence.`,
+    `Inactive sensor responds with frustrated electronic chirp.`,
+    `Dead panel - its neural pathways severed long ago.`,
+    `Status indicator remains dark under your desperate touch.`,
+    `This panel's biometric scanner rejects your authorization.`,
+    `System diagnostic shows this pathway is permanently offline.`,
+    `Emergency protocols have disabled this section's functionality.`,
+    `The smart surface remains cold and unresponsive.`,
+    `Panel memory banks corrupted - access sequence unknown.`,
+    `Building AI marks this panel as non-essential.`,
+    `Pressure sensors register but refuse to engage hydraulics.`,
+    `LED grid flickers briefly then returns to dormant state.`,
+    `Security lockdown has quarantined this panel from access.`,
+    `Database shows this route decommissioned in 2026.`,
+    `Your biometrics fail to match authorized user profiles.`,
+    `Emergency lighting dims slightly with each failed attempt.`,
+    `Building systems grow more suspicious of your presence.`,
+    `Time remaining before automated security sweep activates.`,
+    `Each failed scan increases your digital footprint.`,
+    `The investigation window narrows with every mistake.`,
   ];
 
   return {
@@ -135,4 +135,4 @@ export const generateMissClue = (tapCount: number): Clue => {
   };
 };
 
-// Removed old environmental and periodic clue functions - now using Holmes-themed versions
+// Removed old environmental and periodic clue functions - now using cyberpunk tech-themed versions

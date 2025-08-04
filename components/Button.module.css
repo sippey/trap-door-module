@@ -8,7 +8,7 @@ button.btn {
   background: none;
   line-height: 1;
   font-size: 1rem;
-  font-family: 'Metamorphous', serif;
+  font-family: 'Roboto Mono', monospace;
   transition: all 0.2s ease;
 }
 

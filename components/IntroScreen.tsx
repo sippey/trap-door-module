@@ -21,7 +21,7 @@ const IntroScreen: React.FC<IntroScreenProps> = ({ onBeginGame }) => {
         className={`${styles.button} ${styles.buttonPrimary}`}
         style={{ marginTop: '30px' }}
       >
-        Escape the Room
+Begin Investigation
       </button>
     </div>
   );

@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: 'Metamorphous', serif;
+  font-family: 'Roboto Mono', monospace;
 }
 
 .buttonGroup {
@@ -21,7 +21,7 @@
 .button {
   padding: 15px 30px;
   font-size: 1.2em;
-  font-family: 'Metamorphous', serif;
+  font-family: 'Roboto Mono', monospace;
   color: white;
   border: none;
   border-radius: 5px;

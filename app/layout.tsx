@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'The Murder Castle',
-  description: 'Escape from H.H. Holmes chamber of horrors',
+  title: 'Transamerica Investigation',
+  description: 'Detective thriller in abandoned 2028 San Francisco smart building',
 }
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link 
-          href="https://fonts.googleapis.com/css2?family=Metamorphous&display=swap" 
+          href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap" 
           rel="stylesheet" 
         />
       </head>

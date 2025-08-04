@@ -8,12 +8,12 @@ export interface RoomConfig {
 }
 
 export const ROOM: RoomConfig = {
-  id: 'murder-castle-room',
-  title: 'The Windowless Room',
-  description: 'Escape from H.H. Holmes\' chamber of horrors.',
-  narrative: `You've awakened in a dimly lit, windowless room. The acrid smell of lime and something far worse fills your nostrils. The door behind you is sealed tight, but you know there must be a way out. 
-  
-  You drop to your hands and knees on the cold wooden floor, and you realize there is a precise 10x10 grid of panels. One of them must be a way out. Every panel you test brings you closer to escape...or insanity.`,
-  instructions: `Tap the panels to search for the hidden trap door. An orange tile means you've found part of the mechanism; a brown one is a dead end.`,
-  trapDoorSize: 4, // 2x2 trap door
+  id: 'transamerica-investigation',
+  title: 'Transamerica Pyramid - Floor 47',
+  description: 'Investigate missing technologists in the abandoned smart building.',
+  narrative: `You're Detective Rivera, investigating the disappearance of five tech workers who vanished inside the abandoned Transamerica Pyramid. It's 2028, and this iconic San Francisco tower has been empty since the AI market crash of 2026. Your contact went silent after reporting "something wrong with the smart building systems."
+
+  The emergency lighting casts an eerie blue glow across the 47th floor. Interactive smart panels cover the floor - each one equipped with pressure sensors and LED indicators that once guided building occupants. The building's AI systems are still partially active, but malfunctioning.`,
+  instructions: `Tap the smart floor panels to locate the emergency maintenance hatch. Some panels will respond with status indicators - look for the complete access sequence to unlock the escape route.`,
+  trapDoorSize: 4, // 2x2 escape hatch
 };

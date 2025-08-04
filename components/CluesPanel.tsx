@@ -18,7 +18,7 @@ const CluesPanel: React.FC<CluesPanelProps> = ({ clues }) => {
         </p>
       ) : (
         <p className={styles.messagePanelTextEmpty}>
-          The silence is deafening...
+Awaiting investigation data...
         </p>
       )}
     </div>

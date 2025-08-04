@@ -23,11 +23,11 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clue
   const tapsRemaining = 30 - tapsUsed;
   const sanityPercentage = (tapsRemaining / 30) * 100;
 
-  // Color changes as sanity depletes - using Murder Castle palette
+  // Color changes as investigation time depletes - using cyberpunk palette
   const getSanityColor = (percentage: number) => {
-    if (percentage > 66) return '#e4ceaf'; // dun (calm/rational)
-    if (percentage > 33) return '#d09259'; // persian-orange (worried/declining)
-    return '#c8691c'; // alloy-orange (panicked/insane)
+    if (percentage > 66) return '#00ff9f'; // cyan-green (optimal/focused)
+    if (percentage > 33) return '#ffaa00'; // amber (caution/pressure)
+    return '#ff3333'; // red (critical/detected)
   };
 
   return (
@@ -38,7 +38,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clue
         <div className={styles.gameStats}>
           <span>Timer: {formatTime(timer)}</span>
           <div className={styles.energyContainer}>
-            <span className={styles.energyLabel}>Sanity: {tapsRemaining}</span>
+            <span className={styles.energyLabel}>Scans: {tapsRemaining}</span>
             <div className={styles.energyBar}>
               <div 
                 className={styles.energyFill}

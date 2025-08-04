@@ -48,7 +48,7 @@ export default function Home() {
       clues: [...prevState.clues, {
         id: `initial-clue-${Date.now()}`,
         type: 'periodic_update',
-        message: `The floorboards creak beneath your weight as you begin your desperate search through Holmes' chamber. Each panel might hide your salvation... or seal your doom.`,
+        message: `Building sensors detect your presence on Floor 47. Emergency lighting illuminates smart panels beneath your feet. Begin scanning for the maintenance access sequence.`,
         timestamp: Math.floor(Date.now() / 1000),
       }],
     }));
