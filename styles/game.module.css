@@ -7,7 +7,7 @@
   background-color: #222;
   color: #eee;
   overflow: hidden; /* Prevent overall scroll */
-  background-image: url('/floor.jpg'); /* Floor background for Murder Castle */
+  background-image: var(--floor-bg-image, url('/floor.jpg')); /* Floor background for Murder Castle */
   background-size: cover; /* Cover the entire container */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* Do not repeat the image */
@@ -120,7 +120,7 @@
   background-color: #562a0e; /* seal-brown */
   color: #e4ceaf; /* dun - warm cream text */
   overflow: hidden;
-  background-image: url('/floor.jpg');
+  background-image: var(--floor-bg-image, url('/floor.jpg'));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

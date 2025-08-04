@@ -12,16 +12,19 @@ export class AudioManager {
   }
 
   private initializeAudio() {
+    // Get the base path for assets (empty for dev, /trap-door-module for production)
+    const basePath = process.env.NODE_ENV === 'production' ? '/trap-door-module' : '';
+    
     // Create audio elements for each knock sound
     for (let i = 1; i <= 4; i++) {
-      const audio = new Audio(`/knocks/knock-${i}.mp3`);
+      const audio = new Audio(`${basePath}/knocks/knock-${i}.mp3`);
       audio.preload = 'auto';
       audio.volume = 0.7; // Set volume to 70%
       this.knockSounds.push(audio);
     }
 
     // Create audio element for door opening sound
-    this.doorOpenSound = new Audio('/knocks/door-open.mp3');
+    this.doorOpenSound = new Audio(`${basePath}/knocks/door-open.mp3`);
     this.doorOpenSound.preload = 'auto';
     this.doorOpenSound.volume = 0.8; // Slightly louder for dramatic effect
 

@@ -19,6 +19,12 @@ export default function Home() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [showIntro, setShowIntro] = useState(true);
 
+  // Set CSS custom property for background image path
+  useEffect(() => {
+    const basePath = process.env.NODE_ENV === 'production' ? '/trap-door-module' : '';
+    document.documentElement.style.setProperty('--floor-bg-image', `url('${basePath}/floor.jpg')`);
+  }, []);
+
   // Removed saved game functionality - now always starts fresh
 
   // Removed auto-save functionality for simplified experience
