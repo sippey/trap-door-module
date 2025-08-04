@@ -1,34 +1,40 @@
-import React, { useEffect, useRef } from 'react'; // Import useEffect and useRef
+import React from 'react';
 import { Clue } from '../lib/gameState';
-import styles from '../styles/game.module.css'; // Import the CSS module
+import styles from '../styles/game.module.css';
 
 interface CluesPanelProps {
   clues: Clue[];
 }
 
 const CluesPanel: React.FC<CluesPanelProps> = ({ clues }) => {
-  const cluesEndRef = useRef<HTMLUListElement>(null); // Ref for the end of the clues list, corrected type
-
-  // Auto-scroll to the bottom when new clues are added
-  useEffect(() => {
-    if (cluesEndRef.current) {
-      cluesEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [clues]); // Depend on the clues array
+  // Show only the latest message
+  const latestClue = clues.length > 0 ? clues[clues.length - 1] : null;
 
   return (
-    <div className={styles.cluesPanel}>
-      <h3>Intel</h3>
-      {clues.length === 0 ? (
-        <p>No clues yet. Investigate districts to gather intelligence.</p>
+    <div className={styles.messagePanel}>
+      {latestClue ? (
+        <p style={{ 
+          fontSize: '1.1em', 
+          lineHeight: '1.4', 
+          margin: '0',
+          padding: '20px',
+          textAlign: 'center',
+          fontStyle: 'italic',
+          color: '#ccc'
+        }}>
+          {latestClue.message}
+        </p>
       ) : (
-        <ul ref={cluesEndRef} style={{ listStyleType: 'none', padding: 0, height: '100%', overflowY: 'auto' }}> {/* Apply ref and scrolling to ul */}
-          {clues.map((clue) => (
-            <li key={clue.id} style={{ marginBottom: '5px', fontSize: '0.9em' }}>
-              <strong>[{new Date(clue.timestamp * 1000).toLocaleTimeString()}]</strong> {clue.message}
-            </li>
-          ))}
-        </ul>
+        <p style={{ 
+          fontSize: '1.1em', 
+          fontStyle: 'italic', 
+          color: '#666',
+          margin: '0',
+          padding: '20px',
+          textAlign: 'center'
+        }}>
+          The silence is deafening...
+        </p>
       )}
     </div>
   );

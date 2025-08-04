@@ -1,20 +1,17 @@
-export type GridCellStatus = 'uninvestigated' | 'empty' | 'partial_hit' | 'busted';
+export type GridCellStatus = 'unchecked' | 'empty' | 'partial_hit' | 'found';
 
 export interface GridCell {
   status: GridCellStatus;
-  operationId: string | null;
+  isTrapDoor: boolean;
   clue: string | null;
 }
 
 export type GridState = GridCell[][];
 
-export type OperationType = 'Drug Lab' | 'Weapons Cache' | 'Money Laundering Front' | 'Server Farm' | 'Data Center' | 'Front Company' | 'Forgery Studio' | 'Auction House' | 'Storage Facility' | 'Shipping Container' | 'Warehouse Lab' | 'Safe House';
-
-export interface Operation {
+export interface TrapDoor {
   id: string;
-  type: OperationType;
   coordinates: [number, number][]; // Array of [row, col]
-  busted: boolean;
+  found: boolean;
 }
 
 export interface Clue {
@@ -26,24 +23,28 @@ export interface Clue {
 
 export interface GameState {
   grid: GridState;
-  operations: Operation[];
-  sweepsUsed: number;
+  trapDoor: TrapDoor | null;
+  tapsUsed: number;
   timer: number; // Time in seconds
   clues: Clue[];
-  currentCaseId: string | null;
   isGameOver: boolean;
   isVictory: boolean;
-  score: number | null; // Add score to GameState
+  score: number | null;
 }
 
 export const initialGameState: GameState = {
-  grid: Array(10).fill(null).map(() => Array(10).fill(null).map(() => ({ status: 'uninvestigated', operationId: null, clue: null }))),
-  operations: [],
-  sweepsUsed: 0,
+  grid: Array(10).fill(null).map(() => 
+    Array(10).fill(null).map(() => ({ 
+      status: 'unchecked', 
+      isTrapDoor: false, 
+      clue: null 
+    }))
+  ),
+  trapDoor: null,
+  tapsUsed: 0,
   timer: 0,
   clues: [],
-  currentCaseId: null,
   isGameOver: false,
   isVictory: false,
-  score: null, // Initialize score to null
+  score: null,
 };

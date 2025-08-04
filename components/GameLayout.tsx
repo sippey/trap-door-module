@@ -1,17 +1,16 @@
 import React from 'react';
-import { Clue, Operation } from '../lib/gameState'; // Import Operation
+import { Clue, TrapDoor } from '../lib/gameState';
 import CluesPanel from './CluesPanel';
-import OperationChecklist from './OperationChecklist'; // Import OperationChecklist
-import styles from '../styles/game.module.css'; // Import the CSS module
+import styles from '../styles/game.module.css';
 
 interface GameLayoutProps {
   children: React.ReactNode;
-  sweepsUsed: number;
+  tapsUsed: number;
   timer: number;
   clues: Clue[];
   onQuitGame: () => void;
-  caseTitle: string;
-  operations: Operation[]; // New prop for operations
+  gameTitle: string;
+  trapDoor: TrapDoor | null;
 }
 
 const formatTime = (seconds: number): string => {
@@ -21,29 +20,28 @@ const formatTime = (seconds: number): string => {
   return `${pad(minutes)}:${pad(remainingSeconds)}`;
 };
 
-const GameLayout: React.FC<GameLayoutProps> = ({ children, sweepsUsed, timer, clues, onQuitGame, caseTitle, operations }) => {
+const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clues, onQuitGame, gameTitle, trapDoor }) => {
   return (
-    <div className={styles.container}>
-      {/* Status Bar */}
-      <div className={styles.statusBar}>
-        <h2>{caseTitle}</h2>
-        <div>Timer: {formatTime(timer)} | Sweeps: {sweepsUsed}/30</div>
-        <button onClick={onQuitGame} className={`${styles.button} ${styles.buttonSecondary}`} style={{ marginLeft: '20px' }}>
+    <div className={styles.fullViewportContainer}>
+      {/* Navigation Bar at Top */}
+      <div className={styles.navigationBar}>
+        <h2>{gameTitle}</h2>
+        <div className={styles.gameStats}>
+          <span>Timer: {formatTime(timer)}</span>
+          <span>Taps: {tapsUsed}/30</span>
+        </div>
+        <button onClick={onQuitGame} className={`${styles.button} ${styles.buttonSecondary}`}>
           Quit Game
         </button>
       </div>
 
-      {/* Main Game Area (Grid and Clues Panel) */}
-      <div className={styles.mainContent}>
-        <div className={styles.gameGridContainer}>
-          {children} {/* This will be the Grid component */}
-        </div>
-        {/* Clues & Intelligence Panel */}
-        <CluesPanel clues={clues} />
+      {/* Game Board in Middle */}
+      <div className={styles.gameBoard}>
+        {children} {/* This will be the Grid component */}
       </div>
 
-      {/* Operations Checklist */}
-      <OperationChecklist operations={operations} />
+      {/* Message Panel at Bottom */}
+      <CluesPanel clues={clues} />
     </div>
   );
 };
