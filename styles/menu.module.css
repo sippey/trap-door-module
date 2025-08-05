@@ -1,8 +1,8 @@
 .menuContainer {
   text-align: center;
   padding: 50px;
-  background-color: #562a0e; /* seal-brown */
-  color: #e4ceaf; /* dun */
+  background-color: #191A21; /* Dracula dark background */
+  color: #F8F8F2; /* Dracula foreground text */
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -30,11 +30,11 @@
 }
 
 .buttonPrimary {
-  background-color: #c8691c; /* alloy-orange */
+  background-color: #BD93F9; /* Dracula purple */
 }
 
 .buttonPrimary:hover {
-  background-color: #d09259; /* persian-orange */
+  background-color: #FF79C6; /* Dracula pink on hover */
 }
 
 .buttonWarning {
@@ -47,24 +47,26 @@
 }
 
 .buttonInfo {
-  background-color: #78380c; /* russet */
+  background-color: #8BE9FD; /* Dracula cyan */
+  color: #191A21; /* Dark text for better contrast */
 }
 
 .buttonInfo:hover {
-  background-color: #562a0e; /* seal-brown */
+  background-color: #50FA7B; /* Dracula green on hover */
+  color: #191A21; /* Dark text for better contrast */
 }
 
 .buttonSecondary {
-  background-color: #6c757d;
+  background-color: #44475A; /* Dracula selection */
 }
 
 .buttonSecondary:hover {
-  background-color: #5a6268;
+  background-color: #6272A4; /* Dracula comment on hover */
 }
 
 .buttonDisabled {
-  background-color: #555;
-  color: #aaa;
+  background-color: #44475A; /* Dracula selection */
+  color: #6272A4; /* Dracula comment */
   cursor: not-allowed;
 }
 

@@ -10,18 +10,18 @@ const generateId = (): string => {
   return Math.random().toString(36).substring(2, 15);
 };
 
-// Generates a square trap door of given size (e.g., 2x2)
-export const generateTrapDoor = (
+// Generates a square escape hatch of given size (e.g., 2x2)
+export const generateEscapeHatch = (
   gridSize: number,
-  trapDoorSize: number
+  escapeHatchSize: number
 ): TrapDoor => {
-  // Calculate the dimension of the trap door (e.g., 2 for a 2x2 door)
-  const dimension = Math.sqrt(trapDoorSize);
+  // Calculate the dimension of the escape hatch (e.g., 2 for a 2x2 hatch)
+  const dimension = Math.sqrt(escapeHatchSize);
   if (!Number.isInteger(dimension)) {
-    throw new Error('Trap door size must be a perfect square');
+    throw new Error('Escape hatch size must be a perfect square');
   }
 
-  // Ensure trap door fits within the grid
+  // Ensure escape hatch fits within the grid
   const maxPosition = gridSize - dimension;
   const startRow = Math.floor(Math.random() * (maxPosition + 1));
   const startCol = Math.floor(Math.random() * (maxPosition + 1));
@@ -40,36 +40,36 @@ export const generateTrapDoor = (
   };
 };
 
-// Function to initialize the game grid with trap door
-export const initializeGridWithTrapDoor = (
+// Function to initialize the game grid with escape hatch
+export const initializeGridWithEscapeHatch = (
   gridSize: number,
-  trapDoorSize: number
-): { grid: GridState; trapDoor: TrapDoor } => {
-  const trapDoor = generateTrapDoor(gridSize, trapDoorSize);
+  escapeHatchSize: number
+): { grid: GridState; escapeHatch: TrapDoor } => {
+  const escapeHatch = generateEscapeHatch(gridSize, escapeHatchSize);
   const grid: GridState = Array(gridSize).fill(null).map(() => 
     Array(gridSize).fill(null).map(() => ({ 
       status: 'unchecked', 
-      isTrapDoor: false, 
+      isEscapeHatch: false, 
       clue: null 
     }))
   );
 
-  // Mark trap door cells
-  for (const [r, c] of trapDoor.coordinates) {
-    grid[r][c].isTrapDoor = true;
+  // Mark escape hatch cells
+  for (const [r, c] of escapeHatch.coordinates) {
+    grid[r][c].isEscapeHatch = true;
   }
 
-  return { grid, trapDoor };
+  return { grid, escapeHatch };
 };
 
 // Generates a clue when the player hits part of the escape hatch
-export const generateTrapDoorHitClue = (): Clue => {
+export const generateEscapeHatchHitClue = (): Clue => {
   const clues = [
-    `Panel responds with a soft blue glow and mechanical click.`,
+    `Panel responds with a soft illumination and mechanical click.`,
     `Pressure sensor activated - LED strip illuminates the edges.`,
     `This panel feels different - slightly warmer than others.`,
     `Haptic feedback confirms connection to hydraulic system underneath.`,
-    `Status indicator shows green - part of access sequence detected.`,
+    `Status indicator activates - part of access sequence detected.`,
     `Your touch triggers a faint vibration in this panel.`,
     `Embedded sensors detect authorized pressure pattern here.`,
     `This panel yields slightly with a quiet servo whir.`,
@@ -86,7 +86,7 @@ export const generateTrapDoorHitClue = (): Clue => {
 };
 
 // Generates a clue when the player finds the complete escape hatch
-export const generateTrapDoorFoundClue = (): Clue => {
+export const generateEscapeHatchFoundClue = (): Clue => {
   const clues = [
     `Access sequence complete - hatch unseals with hydraulic hiss.`,
     `Emergency maintenance tunnel illuminates with safety lighting below.`,
@@ -105,10 +105,10 @@ export const generateTrapDoorFoundClue = (): Clue => {
 // Generates a clue when the player taps an inactive panel
 export const generateMissClue = (tapCount: number): Clue => {
   const clues = [
-    `Panel shows red error light - not part of access sequence.`,
+    `Panel shows error indicator - not part of access sequence.`,
     `Inactive sensor responds with frustrated electronic chirp.`,
     `Dead panel - its neural pathways severed long ago.`,
-    `Status indicator remains dark under your desperate touch.`,
+    `Status indicator remains inactive under your desperate touch.`,
     `This panel's biometric scanner rejects your authorization.`,
     `System diagnostic shows this pathway is permanently offline.`,
     `Emergency protocols have disabled this section's functionality.`,
@@ -120,7 +120,7 @@ export const generateMissClue = (tapCount: number): Clue => {
     `Security lockdown has quarantined this panel from access.`,
     `Database shows this route decommissioned in 2026.`,
     `Your biometrics fail to match authorized user profiles.`,
-    `Emergency lighting dims slightly with each failed attempt.`,
+    `Emergency power levels decrease slightly with each failed attempt.`,
     `Building systems grow more suspicious of your presence.`,
     `Time remaining before automated security sweep activates.`,
     `Each failed scan increases your digital footprint.`,

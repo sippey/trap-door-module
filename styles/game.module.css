@@ -110,45 +110,32 @@
   background-color: #555;
 }
 
-/* New viewport layout styles with Murder Castle color palette */
+/* New viewport layout styles with Dracula theme palette */
 .fullViewportContainer {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
   font-family: 'Roboto Mono', monospace;
-  background-color: #562a0e; /* seal-brown */
-  color: #e4ceaf; /* dun - warm cream text */
+  background-color: #191A21; /* Dracula dark background */
+  color: #F8F8F2; /* Dracula primary text */
   overflow: hidden;
-  background-image: var(--floor-bg-image, url('/floor.jpg'));
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   position: relative;
 }
 
-.fullViewportContainer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(86, 42, 14, 0.6); /* darker seal-brown overlay for better contrast */
-  z-index: -1;
-}
+/* Removed overlay - using clean Dracula background */
 
 .navigationBar {
   height: 15vh; /* Fixed height - 15% of viewport */
   padding: 15px 20px;
-  background-color: rgba(120, 56, 12, 0.95); /* russet background */
-  border-bottom: 2px solid #c8691c; /* alloy-orange border */
+  background-color: #282A36; /* Dracula secondary background */
+  border-bottom: 2px solid #BD93F9; /* Dracula purple accent */
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(86, 42, 14, 0.3);
+  box-shadow: 0 2px 8px rgba(25, 26, 33, 0.5);
   box-sizing: border-box;
 }
 
@@ -174,11 +161,11 @@
 .energyBar {
   width: 100px;
   height: 8px;
-  background-color: rgba(86, 42, 14, 0.6); /* seal-brown background */
+  background-color: rgba(40, 42, 54, 0.8); /* Dracula secondary background */
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid #78380c; /* russet border */
-  box-shadow: inset 0 1px 3px rgba(86, 42, 14, 0.5);
+  border: 1px solid #6272A4; /* Dracula comment color */
+  box-shadow: inset 0 1px 3px rgba(25, 26, 33, 0.5);
 }
 
 .energyFill {
@@ -192,20 +179,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0px;
+  padding: 10px;
   overflow: hidden;
   box-sizing: border-box;
+  background-color: #21222C; /* Dracula accent background - subtle contrast */
 }
 
 .messagePanel {
   height: 15vh; /* Fixed height - 15% of viewport */
-  background-color: rgba(120, 56, 12, 0.95); /* russet background */
-  border-top: 2px solid #c8691c; /* alloy-orange border */
+  background-color: #282A36; /* Dracula secondary background */
+  border-top: 2px solid #BD93F9; /* Dracula purple accent */
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 -2px 8px rgba(86, 42, 14, 0.3);
+  box-shadow: 0 -2px 8px rgba(25, 26, 33, 0.5);
   box-sizing: border-box;
   padding: 10px 20px;
   overflow-y: auto; /* Allow scrolling if text is too long */
@@ -218,8 +206,8 @@
   padding: 0;
   text-align: center;
   font-style: italic;
-  color: #e4ceaf; /* dun - warm cream text */
-  text-shadow: 1px 1px 2px rgba(86, 42, 14, 0.8);
+  color: #8BE9FD; /* Dracula cyan - for information/data */
+  text-shadow: 1px 1px 2px rgba(25, 26, 33, 0.8);
   max-height: 100%; /* Ensure text doesn't overflow container */
   overflow-y: auto; /* Allow text scrolling if needed */
 }
@@ -227,11 +215,11 @@
 .messagePanelTextEmpty {
   font-size: clamp(0.9rem, 2.5vh, 1.4rem); /* Responsive font size based on viewport height */
   font-style: italic;
-  color: #d09259; /* persian-orange for empty state */
+  color: #6272A4; /* Dracula comment color for empty/placeholder state */
   margin: 0;
   padding: 0;
   text-align: center;
-  text-shadow: 1px 1px 2px rgba(86, 42, 14, 0.8);
+  text-shadow: 1px 1px 2px rgba(25, 26, 33, 0.8);
 }
 
 .progressBar {

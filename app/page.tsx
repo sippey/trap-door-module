@@ -6,7 +6,7 @@ import Grid from '../components/Grid';
 import IntroScreen from '../components/IntroScreen';
 import EndGameScreen from '../components/EndGameScreen';
 import { initialGameState, GameState, TrapDoor } from '../lib/gameState';
-import { initializeGridWithTrapDoor, generateTrapDoorHitClue, generateTrapDoorFoundClue, generateMissClue } from '../lib/gameUtils';
+import { initializeGridWithEscapeHatch, generateEscapeHatchHitClue, generateEscapeHatchFoundClue, generateMissClue } from '../lib/gameUtils';
 import { ROOM } from '../lib/cases';
 import { audioManager } from '../lib/audioUtils';
 
@@ -19,11 +19,7 @@ export default function Home() {
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [showIntro, setShowIntro] = useState(true);
 
-  // Set CSS custom property for background image path
-  useEffect(() => {
-    const basePath = process.env.NODE_ENV === 'production' ? '/trap-door-module' : '';
-    document.documentElement.style.setProperty('--floor-bg-image', `url('${basePath}/floor.jpg')`);
-  }, []);
+  // Removed background image - using clean Dracula theme backgrounds
 
   // Removed saved game functionality - now always starts fresh
 
@@ -31,12 +27,12 @@ export default function Home() {
 
   // Initialize and start the game
   const handleBeginGame = () => {
-    // Initialize grid and trap door
-    const { grid, trapDoor } = initializeGridWithTrapDoor(GRID_SIZE, ROOM.trapDoorSize);
+    // Initialize grid and escape hatch
+    const { grid, escapeHatch } = initializeGridWithEscapeHatch(GRID_SIZE, ROOM.escapeHatchSize);
     setGameState({
       ...initialGameState,
       grid,
-      trapDoor,
+      escapeHatch,
       clues: [],
     });
     setShowIntro(false);
@@ -83,7 +79,7 @@ export default function Home() {
 
   const handleCellClick = (row: number, col: number) => {
     setGameState(prevGameState => {
-      if (prevGameState.isGameOver || !prevGameState.trapDoor) {
+      if (prevGameState.isGameOver || !prevGameState.escapeHatch) {
         return prevGameState;
       }
 
@@ -92,12 +88,16 @@ export default function Home() {
         return prevGameState;
       }
 
-      // Play random knock sound effect
-      audioManager.playRandomKnock();
-
-      // First, set the cell to 'knocking' state
+      // First, set the cell to 'knocking' state (visual feedback)
       const newGrid = prevGameState.grid.map(rowArr => [...rowArr]);
       newGrid[row][col] = { ...cell, status: 'knocking' };
+
+      // Play appropriate beep sound based on whether it's a hit or miss
+      if (cell.isEscapeHatch) {
+        audioManager.playSuccessBeep(); // beep-2.mp3 for successful attempts
+      } else {
+        audioManager.playFailureBeep(); // beep-1.mp3 for unsuccessful attempts
+      }
 
       return {
         ...prevGameState,
@@ -108,12 +108,12 @@ export default function Home() {
     // After 2 seconds, reveal the actual result
     setTimeout(() => {
       setGameState(prevGameState => {
-        if (prevGameState.isGameOver || !prevGameState.trapDoor) {
+        if (prevGameState.isGameOver || !prevGameState.escapeHatch) {
           return prevGameState;
         }
 
         const newGrid = prevGameState.grid.map(rowArr => [...rowArr]);
-        const newTrapDoor = { ...prevGameState.trapDoor };
+        const newEscapeHatch = { ...prevGameState.escapeHatch };
         let newClues = [...prevGameState.clues];
         const cell = newGrid[row][col];
 
@@ -126,27 +126,27 @@ export default function Home() {
         let newIsGameOver = false;
         let newIsVictory = false;
 
-        if (cell.isTrapDoor) {
+        if (cell.isEscapeHatch) {
           // It's a hit!
           newGrid[row][col] = { ...cell, status: 'partial_hit' };
 
-          // Check if all parts of the trap door are now discovered
-          const discoveredCells = newTrapDoor.coordinates.filter(([r, c]) =>
+          // Check if all parts of the escape hatch are now discovered
+          const discoveredCells = newEscapeHatch.coordinates.filter(([r, c]) =>
             newGrid[r][c].status === 'partial_hit' || newGrid[r][c].status === 'found'
           ).length;
 
-          if (discoveredCells === newTrapDoor.coordinates.length) {
-            // Trap door is fully found!
-            newTrapDoor.found = true;
-            newTrapDoor.coordinates.forEach(([r, c]) => {
+          if (discoveredCells === newEscapeHatch.coordinates.length) {
+            // Escape hatch is fully found!
+            newEscapeHatch.found = true;
+            newEscapeHatch.coordinates.forEach(([r, c]) => {
               newGrid[r][c].status = 'found';
             });
             newIsVictory = true;
             // Generate victory clue
-            newClues.push(generateTrapDoorFoundClue());
+            newClues.push(generateEscapeHatchFoundClue());
             
-            // Play door opening sound effect
-            audioManager.playDoorOpen();
+            // Play hydraulic opening sound effect
+            audioManager.playHydraulicOpen();
             
             // Don't set game over immediately - let player see the success state
             // We'll set game over after a delay
@@ -155,10 +155,10 @@ export default function Home() {
                 ...prevState,
                 isGameOver: true
               }));
-            }, 3000); // 3 second pause to admire the found trap door
+            }, 3000); // 3 second pause to admire the found escape hatch
           } else {
             // Generate partial hit clue
-            newClues.push(generateTrapDoorHitClue());
+            newClues.push(generateEscapeHatchHitClue());
           }
         } else {
           // It's a miss - generate miss clue
@@ -176,7 +176,7 @@ export default function Home() {
         return {
           ...prevGameState,
           grid: newGrid,
-          trapDoor: newTrapDoor,
+          escapeHatch: newEscapeHatch,
           tapsUsed: newTapsUsed,
           isGameOver: newIsGameOver,
           isVictory: newIsVictory,
@@ -203,9 +203,9 @@ export default function Home() {
           timer={gameState.timer}
           clues={gameState.clues}
           gameTitle={ROOM.title}
-          trapDoor={gameState.trapDoor}
+          escapeHatch={gameState.escapeHatch}
         >
-          <Grid grid={gameState.grid} trapDoor={gameState.trapDoor} onCellClick={handleCellClick} />
+          <Grid grid={gameState.grid} escapeHatch={gameState.escapeHatch} onCellClick={handleCellClick} />
         </GameLayout>
       )}
     </>

@@ -9,7 +9,7 @@ interface GameLayoutProps {
   timer: number;
   clues: Clue[];
   gameTitle: string;
-  trapDoor: TrapDoor | null;
+  escapeHatch: TrapDoor | null;
 }
 
 const formatTime = (seconds: number): string => {
@@ -19,15 +19,15 @@ const formatTime = (seconds: number): string => {
   return `${pad(minutes)}:${pad(remainingSeconds)}`;
 };
 
-const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clues, gameTitle, trapDoor }) => {
+const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clues, gameTitle, escapeHatch }) => {
   const tapsRemaining = 30 - tapsUsed;
   const sanityPercentage = (tapsRemaining / 30) * 100;
 
-  // Color changes as investigation time depletes - using cyberpunk palette
+  // Color changes as investigation time depletes - using Dracula palette
   const getSanityColor = (percentage: number) => {
-    if (percentage > 66) return '#00ff9f'; // cyan-green (optimal/focused)
-    if (percentage > 33) return '#ffaa00'; // amber (caution/pressure)
-    return '#ff3333'; // red (critical/detected)
+    if (percentage > 66) return '#50FA7B'; // Dracula green (optimal/focused)
+    if (percentage > 33) return '#F1FA8C'; // Dracula yellow (caution/pressure)
+    return '#FF5555'; // Dracula red (critical/detected)
   };
 
   return (

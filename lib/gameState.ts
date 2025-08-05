@@ -2,17 +2,20 @@ export type GridCellStatus = 'unchecked' | 'knocking' | 'empty' | 'partial_hit' 
 
 export interface GridCell {
   status: GridCellStatus;
-  isTrapDoor: boolean;
+  isEscapeHatch: boolean;
   clue: string | null;
 }
 
 export type GridState = GridCell[][];
 
-export interface TrapDoor {
+export interface EscapeHatch {
   id: string;
   coordinates: [number, number][]; // Array of [row, col]
   found: boolean;
 }
+
+// Legacy interface name for compatibility
+export interface TrapDoor extends EscapeHatch {}
 
 export interface Clue {
   id: string;
@@ -23,7 +26,7 @@ export interface Clue {
 
 export interface GameState {
   grid: GridState;
-  trapDoor: TrapDoor | null;
+  escapeHatch: EscapeHatch | null;
   tapsUsed: number;
   timer: number; // Time in seconds
   clues: Clue[];
@@ -36,11 +39,11 @@ export const initialGameState: GameState = {
   grid: Array(10).fill(null).map(() => 
     Array(10).fill(null).map(() => ({ 
       status: 'unchecked', 
-      isTrapDoor: false, 
+      isEscapeHatch: false, 
       clue: null 
     }))
   ),
-  trapDoor: null,
+  escapeHatch: null,
   tapsUsed: 0,
   timer: 0,
   clues: [],

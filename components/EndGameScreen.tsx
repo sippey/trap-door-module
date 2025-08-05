@@ -14,24 +14,24 @@ const EndGameScreen: React.FC<EndGameScreenProps> = ({
 }) => {
   return (
     <div className={styles.menuContainer}>
-      <h1 style={{ color: isVictory ? '#28a745' : '#dc3545' }}>
-        {isVictory ? 'You Escaped!' : 'Trapped Forever'}
+      <h1 style={{ color: isVictory ? '#50FA7B' : '#FF5555' }}>
+        {isVictory ? 'Access Granted' : 'Investigation Failed'}
       </h1>
       <p style={{ fontSize: '1.2em', marginTop: '20px' }}>
-        {isVictory ? `You outwitted Holmes and escaped through his trap door. But what's next?` : `Holmes' footsteps echo in the hallway. You've become another victim of the Murder Castle.`}
+        {isVictory ? `Emergency maintenance tunnel accessed. You've found the escape route the missing technologists discovered. Time to report back and uncover the truth.` : `Building security systems detected unauthorized access. Your investigation has been terminated. The missing technologists' fate remains a mystery.`}
       </p>
       <div className={styles.buttonGroup}>
         <button
           onClick={onRetry}
           className={`${styles.button} ${styles.buttonPrimary}`}
         >
-          Try Again
+          New Investigation
         </button>
         <button
           onClick={onBackToMainMenu}
           className={`${styles.button} ${styles.buttonInfo}`}
         >
-          Back to Start
+          Return to Briefing
         </button>
       </div>
     </div>
