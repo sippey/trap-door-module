@@ -18,14 +18,35 @@ export default function Home() {
 
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
-  const [showIntro, setShowIntro] = useState(true); // Always start with intro, will be updated in useEffect
+  const [showIntro, setShowIntro] = useState(true); // Always show intro first
+  const [waitingForInit, setWaitingForInit] = useState(false); // Start false, will check in useEffect
+  const [mounted, setMounted] = useState(false); // Track if component is mounted on client
 
-  // Setup iframe communication
+  // Mark component as mounted
   useEffect(() => {
-    // Skip intro if in iframe
-    if (iframeComm.isInIframe()) {
-      setShowIntro(false);
+    setMounted(true);
+  }, []);
+
+  // Setup iframe communication after mount
+  useEffect(() => {
+    if (!mounted) return;
+
+    // Check if we're in an iframe and need to wait for init
+    if (iframeComm.isInIframe() && !iframeComm.isInitialized()) {
+      console.log('In iframe, waiting for INIT message...');
+      setWaitingForInit(true);
     }
+
+    // Handle initialization from parent
+    iframeComm.setOnInit((sanity: number) => {
+      console.log('Game initialized with sanity:', sanity);
+      setWaitingForInit(false);
+      // Set initial sanity when INIT is received
+      setGameState(prevState => ({
+        ...prevState,
+        currentSanity: sanity
+      }));
+    });
 
     // Handle sanity updates from parent
     iframeComm.setOnSanityUpdate((sanity: number) => {
@@ -39,28 +60,20 @@ export default function Home() {
     iframeComm.setOnGameComplete((success: boolean, finalAnswer?: string) => {
       console.log('Game completed:', { success, finalAnswer });
     });
-
-    // If in iframe and initialized, start game automatically
-    if (iframeComm.isInIframe() && iframeComm.isInitialized()) {
-      handleBeginGame();
-    }
-  }, []);
-
-  // Auto-start game when iframe is initialized (for async initialization)
-  useEffect(() => {
-    if (iframeComm.isInIframe() && iframeComm.isInitialized() && !gameStarted) {
-      handleBeginGame();
-    }
-  }, [gameStarted]);
+  }, [mounted]);
 
   // Initialize and start the game
   const handleBeginGame = () => {
+    // Get sanity from iframe communication or use default
+    const startingSanity = iframeComm.isInIframe() ? iframeComm.getInitialSanity() : 100;
+    
     // Initialize grid and escape hatch
     const { grid, escapeHatch } = initializeGridWithEscapeHatch(GRID_SIZE, ROOM.escapeHatchSize);
     setGameState({
       ...initialGameState,
       grid,
       escapeHatch,
+      currentSanity: startingSanity, // Use the sanity from parent or default
       clues: [],
     });
     setShowIntro(false);
@@ -227,6 +240,29 @@ export default function Home() {
       });
     }, 2000); // 2 second delay
   };
+
+  // Don't render until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return null; // Return nothing during SSR
+  }
+
+  // Show loading if waiting for init in iframe
+  if (waitingForInit) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        height: '100vh',
+        background: '#282A36',
+        color: '#F8F8F2',
+        fontFamily: 'monospace',
+        fontSize: '1.2rem'
+      }}>
+        Initializing game module...
+      </div>
+    );
+  }
 
   return (
     <>

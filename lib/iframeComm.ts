@@ -4,8 +4,10 @@ export interface IframeCommState {
   isInIframe: boolean;
   parentOrigin: string | null;
   gameInitialized: boolean;
+  initialSanity: number;
   onSanityUpdate?: (sanity: number) => void;
   onGameComplete?: (success: boolean, finalAnswer?: string) => void;
+  onInit?: (sanity: number) => void;
 }
 
 export class IframeComm {
@@ -16,6 +18,7 @@ export class IframeComm {
       isInIframe: typeof window !== 'undefined' ? window.self !== window.top : false,
       parentOrigin: null,
       gameInitialized: false,
+      initialSanity: 100, // Default sanity
     };
 
     // Only setup communication on client-side
@@ -32,15 +35,18 @@ export class IframeComm {
     if (this.state.isInIframe) {
       this.sendReady();
       
+      // Don't auto-initialize in iframe - wait for INIT message
       // Fallback timeout - initialize with defaults if no INIT received
       setTimeout(() => {
         if (!this.state.gameInitialized) {
+          console.log('No INIT message received after 10 seconds, using default sanity');
           this.handleInit({ gameId: 'default', sanity: 100 });
         }
       }, 10000);
     } else {
       // Not in iframe - initialize immediately with defaults
-      this.handleInit({ gameId: 'default', sanity: 100 });
+      this.state.gameInitialized = true;
+      this.state.initialSanity = 100;
     }
   }
 
@@ -61,11 +67,18 @@ export class IframeComm {
   }
 
   private handleInit(payload: any) {
+    console.log('Received INIT message with payload:', payload);
     this.state.gameInitialized = true;
+    this.state.initialSanity = payload.sanity || 100;
     
-    // Notify game of initialization with sanity value
+    // Notify game of initialization
+    if (this.state.onInit) {
+      this.state.onInit(this.state.initialSanity);
+    }
+    
+    // Also update current sanity
     if (this.state.onSanityUpdate) {
-      this.state.onSanityUpdate(payload.sanity || 100);
+      this.state.onSanityUpdate(this.state.initialSanity);
     }
   }
 
@@ -116,12 +129,20 @@ export class IframeComm {
     this.state.onGameComplete = callback;
   }
 
+  public setOnInit(callback: (sanity: number) => void) {
+    this.state.onInit = callback;
+  }
+
   public isInIframe(): boolean {
     return this.state.isInIframe;
   }
 
   public isInitialized(): boolean {
     return this.state.gameInitialized;
+  }
+
+  public getInitialSanity(): number {
+    return this.state.initialSanity;
   }
 }
 
