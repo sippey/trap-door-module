@@ -9,6 +9,7 @@ import { initialGameState, GameState, TrapDoor } from '../lib/gameState';
 import { initializeGridWithEscapeHatch, generateEscapeHatchHitClue, generateEscapeHatchFoundClue, generateMissClue } from '../lib/gameUtils';
 import { ROOM } from '../lib/cases';
 import { audioManager } from '../lib/audioUtils';
+import { iframeComm } from '../lib/iframeComm';
 
 const GRID_SIZE = 10;
 
@@ -17,13 +18,40 @@ export default function Home() {
 
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(true); // Always start with intro, will be updated in useEffect
 
-  // Removed background image - using clean Dracula theme backgrounds
+  // Setup iframe communication
+  useEffect(() => {
+    // Skip intro if in iframe
+    if (iframeComm.isInIframe()) {
+      setShowIntro(false);
+    }
 
-  // Removed saved game functionality - now always starts fresh
+    // Handle sanity updates from parent
+    iframeComm.setOnSanityUpdate((sanity: number) => {
+      setGameState(prevState => ({
+        ...prevState,
+        currentSanity: sanity
+      }));
+    });
 
-  // Removed auto-save functionality for simplified experience
+    // Handle game completion communication
+    iframeComm.setOnGameComplete((success: boolean, finalAnswer?: string) => {
+      console.log('Game completed:', { success, finalAnswer });
+    });
+
+    // If in iframe and initialized, start game automatically
+    if (iframeComm.isInIframe() && iframeComm.isInitialized()) {
+      handleBeginGame();
+    }
+  }, []);
+
+  // Auto-start game when iframe is initialized (for async initialization)
+  useEffect(() => {
+    if (iframeComm.isInIframe() && iframeComm.isInitialized() && !gameStarted) {
+      handleBeginGame();
+    }
+  }, [gameStarted]);
 
   // Initialize and start the game
   const handleBeginGame = () => {
@@ -122,9 +150,12 @@ export default function Home() {
           return prevGameState;
         }
 
-        const newTapsUsed = prevGameState.tapsUsed + 1;
+        const newSanity = prevGameState.currentSanity - 1; // Each tap costs 1 sanity
         let newIsGameOver = false;
         let newIsVictory = false;
+
+        // Communicate sanity change to parent
+        iframeComm.sendSanityChange(-1);
 
         if (cell.isEscapeHatch) {
           // It's a hit!
@@ -163,21 +194,31 @@ export default function Home() {
         } else {
           // It's a miss - generate miss clue
           newGrid[row][col] = { ...cell, status: 'empty' };
-          newClues.push(generateMissClue(newTapsUsed));
+          newClues.push(generateMissClue(Math.max(100 - newSanity, 1))); // Pass attempts made
         }
 
-        // Check for failure condition
-        if (newTapsUsed >= 30 && !newIsVictory) {
+        // Check for failure condition - game ends when sanity reaches 0
+        if (newSanity <= 0 && !newIsVictory) {
           newIsGameOver = true;
         }
 
-        const calculatedScore = (newIsVictory || newIsGameOver) ? (prevGameState.timer + (newTapsUsed * 10)) : null;
+        const calculatedScore = (newIsVictory || newIsGameOver) ? (prevGameState.timer + ((100 - newSanity) * 10)) : null;
+
+        // Send game completion message to parent
+        if (newIsGameOver || newIsVictory) {
+          setTimeout(() => {
+            iframeComm.sendGameComplete(
+              newIsVictory, 
+              newIsVictory ? `Completed in ${100 - newSanity} attempts with ${newSanity} sanity remaining` : undefined
+            );
+          }, 100); // Small delay to ensure state is updated
+        }
 
         return {
           ...prevGameState,
           grid: newGrid,
           escapeHatch: newEscapeHatch,
-          tapsUsed: newTapsUsed,
+          currentSanity: newSanity,
           isGameOver: newIsGameOver,
           isVictory: newIsVictory,
           score: calculatedScore !== null ? calculatedScore : prevGameState.score,
@@ -199,7 +240,7 @@ export default function Home() {
         />
       ) : (
         <GameLayout
-          tapsUsed={gameState.tapsUsed}
+          currentSanity={gameState.currentSanity}
           timer={gameState.timer}
           clues={gameState.clues}
           gameTitle={ROOM.title}

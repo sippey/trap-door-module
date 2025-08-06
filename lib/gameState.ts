@@ -27,7 +27,7 @@ export interface Clue {
 export interface GameState {
   grid: GridState;
   escapeHatch: EscapeHatch | null;
-  tapsUsed: number;
+  currentSanity: number;
   timer: number; // Time in seconds
   clues: Clue[];
   isGameOver: boolean;
@@ -44,7 +44,7 @@ export const initialGameState: GameState = {
     }))
   ),
   escapeHatch: null,
-  tapsUsed: 0,
+  currentSanity: 100, // Default starting sanity
   timer: 0,
   clues: [],
   isGameOver: false,

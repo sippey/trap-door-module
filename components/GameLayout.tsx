@@ -5,7 +5,7 @@ import styles from '../styles/game.module.css';
 
 interface GameLayoutProps {
   children: React.ReactNode;
-  tapsUsed: number;
+  currentSanity: number;
   timer: number;
   clues: Clue[];
   gameTitle: string;
@@ -19,14 +19,13 @@ const formatTime = (seconds: number): string => {
   return `${pad(minutes)}:${pad(remainingSeconds)}`;
 };
 
-const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clues, gameTitle, escapeHatch }) => {
-  const tapsRemaining = 30 - tapsUsed;
-  const sanityPercentage = (tapsRemaining / 30) * 100;
+const GameLayout: React.FC<GameLayoutProps> = ({ children, currentSanity, timer, clues, gameTitle, escapeHatch }) => {
+  const sanityPercentage = Math.max(currentSanity, 0); // Sanity is already a percentage (0-100)
 
-  // Color changes as investigation time depletes - using Dracula palette
-  const getSanityColor = (percentage: number) => {
-    if (percentage > 66) return '#50FA7B'; // Dracula green (optimal/focused)
-    if (percentage > 33) return '#F1FA8C'; // Dracula yellow (caution/pressure)
+  // Color changes as sanity depletes - using Dracula palette
+  const getSanityColor = (sanity: number) => {
+    if (sanity > 66) return '#50FA7B'; // Dracula green (optimal/focused)
+    if (sanity > 33) return '#F1FA8C'; // Dracula yellow (caution/pressure)
     return '#FF5555'; // Dracula red (critical/detected)
   };
 
@@ -38,7 +37,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children, tapsUsed, timer, clue
         <div className={styles.gameStats}>
           <span>Timer: {formatTime(timer)}</span>
           <div className={styles.energyContainer}>
-            <span className={styles.energyLabel}>Scans: {tapsRemaining}</span>
+            <span className={styles.energyLabel}>Sanity: {Math.max(currentSanity, 0)}</span>
             <div className={styles.energyBar}>
               <div 
                 className={styles.energyFill}
