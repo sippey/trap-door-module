@@ -13,7 +13,7 @@ const IntroScreen: React.FC<IntroScreenProps> = ({ onBeginGame }) => {
       <div style={{ maxWidth: '800px', margin: '20px auto', textAlign: 'left', lineHeight: '1.6' }}>
         <p>{ROOM.narrative.split('\n\n')[0]}</p>
         <p>{ROOM.narrative.split('\n\n')[1]}</p>
-        <h2 style={{ marginTop: '30px' }}>Your Objective:</h2>
+        <h2 style={{ marginTop: '30px' }}>Your Task:</h2>
         <p>{ROOM.instructions}</p>
       </div>
       <button
@@ -21,7 +21,7 @@ const IntroScreen: React.FC<IntroScreenProps> = ({ onBeginGame }) => {
         className={`${styles.button} ${styles.buttonPrimary}`}
         style={{ marginTop: '30px' }}
       >
-Begin Investigation
+Find the Hatch
       </button>
     </div>
   );
